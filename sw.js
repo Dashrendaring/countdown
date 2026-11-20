@@ -17,6 +17,8 @@ self.addEventListener("activate", (event) => {
 self.addEventListener("fetch", (event) => {
   const req = event.request;
   if (req.method !== "GET") return;
+  // The Power Surge game in surge/ has its own service worker; leave it alone.
+  if (new URL(req.url).pathname.startsWith(new URL("surge/", self.registration.scope).pathname)) return;
   // Pages: try the network first so updates show on the next launch; fall back to the cache offline.
   if (req.mode === "navigate") {
     event.respondWith(
